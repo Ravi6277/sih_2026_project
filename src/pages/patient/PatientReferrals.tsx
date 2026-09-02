@@ -6,6 +6,7 @@ import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const statusIcons: Record<string, any> = {
   pending: Circle, accepted: CheckCircle2, in_transit: Truck, appointment_scheduled: CalendarCheck, completed: CheckCircle2, followup_required: Clock3,
@@ -15,18 +16,19 @@ const lifecycleSteps = ['Created', 'Accepted', 'Appointment', 'Arrived', 'Consul
 
 export function PatientReferrals() {
   const [selectedReferral, setSelectedReferral] = useState<any>(null);
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Referrals</h1>
-        <p className="text-sm text-gray-500 mt-1">Track your referral journey across facilities.</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.referrals')}</h1>
+        <p className="text-sm text-gray-500 mt-1">{t('ref.trackJourney')}</p>
       </motion.div>
 
       {/* Lifecycle */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-card-elevated p-6">
-        <h2 className="text-sm font-bold text-gray-900 mb-4">Referral Lifecycle</h2>
+        <h2 className="text-sm font-bold text-gray-900 mb-4">{t('ref.lifecycle')}</h2>
         <div className="flex items-center gap-0 overflow-x-auto pb-2">
           {lifecycleSteps.map((step, i) => {
             const isCompleted = i < 2;

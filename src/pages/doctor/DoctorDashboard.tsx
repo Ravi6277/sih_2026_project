@@ -5,6 +5,7 @@ import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { patients } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface DoctorDashboardProps {
   onNavigate: (route: string) => void;
@@ -12,6 +13,7 @@ interface DoctorDashboardProps {
 
 export function DoctorDashboard({ onNavigate }: DoctorDashboardProps) {
   const { showToast } = useToast();
+  const { t } = useLanguage();
 
   const todayQueue = [
     { patient: patients[0], time: '11:30 AM', reason: 'Hypertension follow-up', mode: 'Video', priority: 'high' },
@@ -27,7 +29,7 @@ export function DoctorDashboard({ onNavigate }: DoctorDashboardProps) {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Good morning, Dr. Ananya 👋</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('dash.goodMorning')}, Dr. Ananya 👋</h1>
           <p className="text-gray-600 mt-1">Here's your clinical workload for today.</p>
         </div>
       </motion.div>

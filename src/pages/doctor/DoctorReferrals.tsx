@@ -5,9 +5,11 @@ import { referrals } from '../../data/mockData';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function DoctorReferrals() {
   const [selected, setSelected] = useState<any>(null);
+  const { t } = useLanguage();
   const [filter, setFilter] = useState('all');
   const { showToast } = useToast();
 
@@ -24,7 +26,7 @@ export function DoctorReferrals() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Referrals</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.referrals')}</h1>
         <p className="text-sm text-gray-500 mt-1">Review and process patient referrals.</p>
       </motion.div>
 

@@ -3,14 +3,16 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { Clock, CheckCircle2, MapPin, Activity } from 'lucide-react';
 import { analyticsData } from '../../data/mockData';
 import { StatCard } from '../../components/ui/StatCard';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientAnalytics() {
   const { patientFlow, kpis } = analyticsData;
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Healthcare Analytics</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.analytics')}</h1>
         <p className="text-sm text-gray-500 mt-1">Insights into your healthcare journey and platform performance.</p>
       </motion.div>
 

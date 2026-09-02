@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Bell, Stethoscope, AlertCircle, Clock, Pill, Calendar, UserPlus } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const doctorNotifications = [
   { id: 'DN001', title: 'New Patient Referral', message: 'Rahul Sharma has been referred to you for cardiac evaluation', time: '5 minutes ago', type: 'referral', read: false },
@@ -16,10 +17,11 @@ const typeIcons: Record<string, any> = {
 };
 
 export function DoctorNotifications() {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.notifications')}</h1>
         <p className="text-sm text-gray-500 mt-1">Stay updated on clinical activities.</p>
       </motion.div>
 

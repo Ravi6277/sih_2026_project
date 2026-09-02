@@ -6,9 +6,11 @@ import {
 import { Avatar } from '../../components/ui/Avatar';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function VideoConsultation() {
   const [muted, setMuted] = useState(false);
+  const { t } = useLanguage();
   const [videoOff, setVideoOff] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [showEndConfirm, setShowEndConfirm] = useState(false);
@@ -26,7 +28,7 @@ export function VideoConsultation() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Video Consultation</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('dash.videoConsultation')}</h1>
           <p className="text-sm text-gray-500 mt-1">Consultation with Dr. Ananya Sharma — PHC Chandrapur</p>
         </div>
         <div className="flex items-center gap-2">

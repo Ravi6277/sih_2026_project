@@ -7,20 +7,22 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { appointments } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface PatientAppointmentsProps {
   onNavigate: (route: string) => void;
 }
 
 export function PatientAppointments({ onNavigate }: PatientAppointmentsProps) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('upcoming');
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const { showToast } = useToast();
 
   const tabs = [
-    { id: 'upcoming', label: 'Upcoming', count: appointments.filter(a => a.status === 'upcoming').length },
-    { id: 'completed', label: 'Completed', count: appointments.filter(a => a.status === 'completed').length },
-    { id: 'cancelled', label: 'Cancelled', count: 0 },
+    { id: 'upcoming', label: t('common.upcoming'), count: appointments.filter(a => a.status === 'upcoming').length },
+    { id: 'completed', label: t('common.completed'), count: appointments.filter(a => a.status === 'completed').length },
+    { id: 'cancelled', label: t('common.cancelled'), count: 0 },
   ];
 
   const filtered = appointments.filter(a => a.status === activeTab || (activeTab === 'upcoming' && a.status === 'upcoming'));
@@ -30,17 +32,17 @@ export function PatientAppointments({ onNavigate }: PatientAppointmentsProps) {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
-            <p className="text-sm text-gray-500 mt-1">Manage your upcoming and past consultations.</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('dash.appointments')}</h1>
+            <p className="text-sm text-gray-500 mt-1">{t('ap.manageConsultations')}</p>
           </div>
-          <Button onClick={() => { showToast('Appointment booking opened'); }}>Book Appointment</Button>
+          <Button onClick={() => { showToast('Appointment booking opened'); }}>{t('dash.bookAppointment')}</Button>
         </div>
       </motion.div>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <Tabs tabs={tabs} onChange={setActiveTab} />
         <button className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-white/60 transition-colors">
-          <Filter size={14} /> Filter
+          <Filter size={14} /> {t('common.filter')}
         </button>
       </div>
 
@@ -107,15 +109,15 @@ export function PatientAppointments({ onNavigate }: PatientAppointmentsProps) {
               <div className="flex gap-2 shrink-0">
                 {apt.status === 'upcoming' && apt.type === 'Video Consultation' && (
                   <Button size="sm" onClick={() => onNavigate('/patient/consultation')}>
-                    <Video size={14} /> Join
+                    <Video size={14} /> {t('apt.join')}
                   </Button>
                 )}
                 <Button size="sm" variant="secondary" onClick={() => setSelectedAppointment(apt)}>
-                  Details
+                  {t('apt.details')}
                 </Button>
                 {apt.status === 'upcoming' && (
                   <Button size="sm" variant="ghost" onClick={() => showToast('Appointment cancelled')}>
-                    Cancel
+                    {t('apt.cancel')}
                   </Button>
                 )}
               </div>
@@ -133,7 +135,7 @@ export function PatientAppointments({ onNavigate }: PatientAppointmentsProps) {
       <div className="h-4 lg:hidden" />
 
       {/* Detail modal */}
-      <Modal isOpen={!!selectedAppointment} onClose={() => setSelectedAppointment(null)} title="Appointment Details" size="lg">
+      <Modal isOpen={!!selectedAppointment} onClose={() => setSelectedAppointment(null)} title={t('apt.details')} size="lg">
         {selectedAppointment && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -146,14 +148,14 @@ export function PatientAppointments({ onNavigate }: PatientAppointmentsProps) {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-sahaay-surface">
-              <div><p className="text-xs text-gray-500">Date</p><p className="text-sm font-semibold">{selectedAppointment.date}</p></div>
-              <div><p className="text-xs text-gray-500">Time</p><p className="text-sm font-semibold">{selectedAppointment.time}</p></div>
-              <div><p className="text-xs text-gray-500">Facility</p><p className="text-sm font-semibold">{selectedAppointment.facility}</p></div>
-              <div><p className="text-xs text-gray-500">Type</p><p className="text-sm font-semibold">{selectedAppointment.type}</p></div>
+              <div><p className="text-xs text-gray-500">{t('apt.date')}</p><p className="text-sm font-semibold">{selectedAppointment.date}</p></div>
+              <div><p className="text-xs text-gray-500">{t('apt.time')}</p><p className="text-sm font-semibold">{selectedAppointment.time}</p></div>
+              <div><p className="text-xs text-gray-500">{t('dash.facilities')}</p><p className="text-sm font-semibold">{selectedAppointment.facility}</p></div>
+              <div><p className="text-xs text-gray-500">{t('apt.type')}</p><p className="text-sm font-semibold">{selectedAppointment.type}</p></div>
             </div>
             <div className="flex gap-3">
-              <Button onClick={() => { showToast('Reschedule request sent'); setSelectedAppointment(null); }}>Reschedule</Button>
-              <Button variant="secondary" onClick={() => setSelectedAppointment(null)}>Close</Button>
+              <Button onClick={() => { showToast('Reschedule request sent'); setSelectedAppointment(null); }}>{t('apt.reschedule')}</Button>
+              <Button variant="secondary" onClick={() => setSelectedAppointment(null)}>{t('common.close')}</Button>
             </div>
           </div>
         )}

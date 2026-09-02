@@ -4,6 +4,7 @@ import { StatCard } from '../../components/ui/StatCard';
 import { Button } from '../../components/ui/Button';
 import { patients } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface WorkerDashboardProps {
   onNavigate: (route: string) => void;
@@ -11,6 +12,7 @@ interface WorkerDashboardProps {
 
 export function WorkerDashboard({ onNavigate }: WorkerDashboardProps) {
   const { showToast } = useToast();
+  const { t } = useLanguage();
 
   const quickActions = [
     { icon: UserPlus, label: 'Register Patient', route: '/worker/patients' },
@@ -41,7 +43,7 @@ export function WorkerDashboard({ onNavigate }: WorkerDashboardProps) {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Good morning, Meena 🌟</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('dash.goodMorning')}, Meena 🌟</h1>
           <p className="text-gray-600 mt-1">ASHA Worker · PHC Chandrapur · Chandrapur Village</p>
         </div>
       </motion.div>

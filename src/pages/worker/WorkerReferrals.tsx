@@ -5,9 +5,11 @@ import { referrals } from '../../data/mockData';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function WorkerReferrals() {
   const [selected, setSelected] = useState<any>(null);
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   const statusColors: Record<string, string> = {
@@ -24,7 +26,7 @@ export function WorkerReferrals() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Referrals</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('dash.referrals')}</h1>
             <p className="text-sm text-gray-500 mt-1">Create and track referrals for patients.</p>
           </div>
           <Button onClick={() => showToast('Referral form opened')}><Plus size={16} /> New Referral</Button>

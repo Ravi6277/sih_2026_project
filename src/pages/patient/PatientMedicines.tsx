@@ -5,9 +5,11 @@ import { medicines } from '../../data/mockData';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientMedicines() {
   const [search, setSearch] = useState('');
+  const { t } = useLanguage();
   const [category, setCategory] = useState('all');
   const { showToast } = useToast();
 
@@ -20,14 +22,14 @@ export function PatientMedicines() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Medicine Availability</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.medicines')}</h1>
         <p className="text-sm text-gray-500 mt-1">Check medicine stock across nearby facilities.</p>
       </motion.div>
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input type="text" placeholder="Search medicines..." value={search} onChange={e => setSearch(e.target.value)} className="sahaay-input pl-10" />
+          <input type="text" placeholder={t('med.searchMeds')} value={search} onChange={e => setSearch(e.target.value)} className="sahaay-input pl-10" />
         </div>
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {categories.map(cat => (

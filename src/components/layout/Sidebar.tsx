@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, Calendar, MessageSquare, FileText, Stethoscope,
   Pill, Activity, Building2, Bell, BarChart3, Settings, Heart,
   ChevronLeft, ChevronRight, LogOut, HelpCircle, ClipboardList,
-  Video
+  Video, Mic, Upload
 } from 'lucide-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 
@@ -19,13 +19,17 @@ interface SidebarProps {
 const roleMenus: Record<string, { label: string; icon: any; route: string }[]> = {
   patient: [
     { label: 'Overview', icon: LayoutDashboard, route: '/patient/dashboard' },
+    { label: 'Symptom Checker', icon: Stethoscope, route: '/patient/symptom-checker' },
+    { label: 'AI Assistant', icon: Mic, route: '/patient/ai-assistant' },
+    { label: 'My Vitals', icon: Activity, route: '/patient/vitals' },
+    { label: 'Lab Reports', icon: Upload, route: '/patient/lab-reports' },
     { label: 'Appointments', icon: Calendar, route: '/patient/appointments' },
     { label: 'Health Records', icon: FileText, route: '/patient/records' },
     { label: 'Referrals', icon: ClipboardList, route: '/patient/referrals' },
     { label: 'Facilities', icon: Building2, route: '/patient/facilities' },
     { label: 'Diagnostics', icon: Activity, route: '/patient/diagnostics' },
     { label: 'Medicines', icon: Pill, route: '/patient/medicines' },
-    { label: 'Follow-ups', icon: Stethoscope, route: '/patient/followups' },
+    { label: 'Follow-ups', icon: ClipboardList, route: '/patient/followups' },
     { label: 'Messages', icon: MessageSquare, route: '/patient/messages' },
     { label: 'Notifications', icon: Bell, route: '/patient/notifications' },
     { label: 'Analytics', icon: BarChart3, route: '/patient/analytics' },
@@ -71,17 +75,21 @@ const menuLabels: Record<string, string> = {
   'Health Records': 'dash.records',
   'Referrals': 'dash.referrals',
   'Facilities': 'dash.facilities',
-  'Diagnostics': 'common.all',
-  'Medicines': 'common.all',
+  'Diagnostics': 'dash.diagnostics',
+  'Medicines': 'dash.medicines',
   'Follow-ups': 'dash.followups',
   'Messages': 'dash.messages',
   'Notifications': 'dash.notifications',
   'Analytics': 'dash.analytics',
   'Settings': 'dash.settings',
   'My Patients': 'dash.patients',
-  'Consultations': 'dash.appointments',
+  'Consultations': 'dash.consultations',
   'Patients': 'dash.patients',
-  'Inventory': 'common.all',
+  'Inventory': 'dash.inventory',
+  'Symptom Checker': 'dash.symptomChecker',
+  'AI Assistant': 'dash.aiAssistant',
+  'My Vitals': 'dash.myVitals',
+  'Lab Reports': 'dash.labReports',
 };
 
 export function Sidebar({ collapsed, onToggle, activeRoute, onNavigate, role }: SidebarProps) {

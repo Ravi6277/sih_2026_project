@@ -5,9 +5,11 @@ import { patients } from '../../data/mockData';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function DoctorPatients() {
   const [search, setSearch] = useState('');
+  const { t } = useLanguage();
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [filter, setFilter] = useState('all');
 
@@ -20,7 +22,7 @@ export function DoctorPatients() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">My Patients</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.patients')}</h1>
         <p className="text-sm text-gray-500 mt-1">Manage your patient list and clinical records.</p>
       </motion.div>
 

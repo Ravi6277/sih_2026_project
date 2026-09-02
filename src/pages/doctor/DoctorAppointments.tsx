@@ -7,9 +7,11 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { appointments } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function DoctorAppointments() {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const { t } = useLanguage();
   const [selected, setSelected] = useState<any>(null);
   const { showToast } = useToast();
 
@@ -24,7 +26,7 @@ export function DoctorAppointments() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.appointments')}</h1>
         <p className="text-sm text-gray-500 mt-1">View and manage your consultation schedule.</p>
       </motion.div>
 

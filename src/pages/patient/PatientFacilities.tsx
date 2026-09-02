@@ -5,9 +5,11 @@ import { facilities } from '../../data/mockData';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientFacilities() {
   const [filterType, setFilterType] = useState('all');
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   const types = ['all', 'Primary Health Centre', 'Community Health Centre', 'District Hospital', 'Rural Health Centre', 'Specialist Centre'];
@@ -16,7 +18,7 @@ export function PatientFacilities() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Find the Right Facility</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('fac.findRight')}</h1>
         <p className="text-sm text-gray-500 mt-1">Recommended based on your healthcare need, available services and accessibility.</p>
       </motion.div>
 
@@ -97,7 +99,7 @@ export function PatientFacilities() {
             </div>
 
             <div className="flex gap-2">
-              <Button size="sm" variant="secondary" onClick={() => showToast(`${facility.name} details viewed`)}>View Facility</Button>
+              <Button size="sm" variant="secondary" onClick={() => showToast(`${facility.name} details viewed`)}>{t('fac.viewFacility')}</Button>
               <Button size="sm" onClick={() => showToast(`Directions to ${facility.name}`)}>Get Directions</Button>
             </div>
           </motion.div>

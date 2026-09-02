@@ -1,17 +1,19 @@
 import { motion } from 'framer-motion';
 import { Bell, CheckCircle2, Stethoscope, AlertCircle, Clock, Pill, Calendar } from 'lucide-react';
 import { notifications } from '../../data/mockData';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const typeIcons: Record<string, any> = {
   referral: CheckCircle2, consultation: Stethoscope, followup: Clock, diagnostic: AlertCircle, medicine: Pill, appointment: Calendar,
 };
 
 export function PatientNotifications() {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-        <p className="text-sm text-gray-500 mt-1">Stay updated on your healthcare activities.</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.notifications')}</h1>
+        <p className="text-sm text-gray-500 mt-1">{t('noti.desc')}</p>
       </motion.div>
 
       <div className="space-y-2">

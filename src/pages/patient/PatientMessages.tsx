@@ -4,9 +4,11 @@ import { Send, Paperclip, Mic, Search } from 'lucide-react';
 import { messages } from '../../data/mockData';
 import { Avatar } from '../../components/ui/Avatar';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientMessages() {
   const [selectedChat, setSelectedChat] = useState(messages[0]);
+  const { t } = useLanguage();
   const [newMessage, setNewMessage] = useState('');
   const { showToast } = useToast();
 
@@ -20,7 +22,7 @@ export function PatientMessages() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.messages')}</h1>
         <p className="text-sm text-gray-500 mt-1">Communicate with your healthcare providers.</p>
       </motion.div>
 

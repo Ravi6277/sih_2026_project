@@ -7,8 +7,10 @@ import { StatusBadge } from '../../components/ui/StatusBadge';
 import { CareJourney } from '../../components/ui/CareJourney';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientRecords() {
+  const { t } = useLanguage();
   const [expandedSection, setExpandedSection] = useState<string | null>('overview');
   const { showToast } = useToast();
   const patient = patients[0];
@@ -16,13 +18,13 @@ export function PatientRecords() {
   const toggleSection = (section: string) => setExpandedSection(expandedSection === section ? null : section);
 
   const sections = [
-    { id: 'overview', label: 'Patient Overview', icon: Heart },
-    { id: 'history', label: 'Medical History', icon: FileText },
-    { id: 'conditions', label: 'Current Conditions', icon: Activity },
-    { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
-    { id: 'diagnostics', label: 'Diagnostic Reports', icon: Activity },
-    { id: 'vaccinations', label: 'Vaccination', icon: Syringe },
-    { id: 'allergies', label: 'Allergies', icon: AlertTriangle },
+    { id: 'overview', label: t('rec.patientOverview'), icon: Heart },
+    { id: 'history', label: t('rec.medicalHistory'), icon: FileText },
+    { id: 'conditions', label: t('rec.currentConditions'), icon: Activity },
+    { id: 'prescriptions', label: t('rec.prescriptions'), icon: Pill },
+    { id: 'diagnostics', label: t('rec.diagnosticReports'), icon: Activity },
+    { id: 'vaccinations', label: t('rec.vaccination'), icon: Syringe },
+    { id: 'allergies', label: t('rec.allergies'), icon: AlertTriangle },
   ];
 
   const timelineSteps = healthRecords.timeline.map(t => ({
@@ -36,12 +38,12 @@ export function PatientRecords() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Health Records</h1>
-            <p className="text-sm text-gray-500 mt-1">Your complete health timeline and medical records.</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('dash.records')}</h1>
+            <p className="text-sm text-gray-500 mt-1">{t('rec.desc')}</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="secondary" icon={<Download size={14} />} onClick={() => showToast('Record downloaded')}>Download</Button>
-            <Button variant="secondary" icon={<Share2 size={14} />} onClick={() => showToast('Share link copied')}>Share</Button>
+            <Button variant="secondary" icon={<Download size={14} />} onClick={() => showToast('Record downloaded')}>{t('lab.download')}</Button>
+            <Button variant="secondary" icon={<Share2 size={14} />} onClick={() => showToast('Share link copied')}>{t('rec.share')}</Button>
           </div>
         </div>
       </motion.div>
@@ -51,21 +53,21 @@ export function PatientRecords() {
         <div className="flex flex-col sm:flex-row items-start gap-4">
           <Avatar initials={patient.avatar} size="xl" />
           <div className="flex-1 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div><p className="text-xs text-gray-500 font-medium">Name</p><p className="text-sm font-bold">{patient.name}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Age / Gender</p><p className="text-sm font-bold">{patient.age} years · {patient.gender}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Blood Group</p><p className="text-sm font-bold">{patient.bloodGroup}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Location</p><p className="text-sm font-bold">{patient.location}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Phone</p><p className="text-sm font-bold">{patient.phone}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Emergency Contact</p><p className="text-sm font-bold">{patient.emergencyContact}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Registered</p><p className="text-sm font-bold">{patient.registeredDate}</p></div>
-            <div><p className="text-xs text-gray-500 font-medium">Status</p><StatusBadge status={patient.status} size="md" /></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.name')}</p><p className="text-sm font-bold">{patient.name}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.ageGender')}</p><p className="text-sm font-bold">{patient.age} years · {patient.gender}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.bloodGroup')}</p><p className="text-sm font-bold">{patient.bloodGroup}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.location')}</p><p className="text-sm font-bold">{patient.location}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.phone')}</p><p className="text-sm font-bold">{patient.phone}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.emergencyContact')}</p><p className="text-sm font-bold">{patient.emergencyContact}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.registered')}</p><p className="text-sm font-bold">{patient.registeredDate}</p></div>
+            <div><p className="text-xs text-gray-500 font-medium">{t('rec.status')}</p><StatusBadge status={patient.status} size="md" /></div>
           </div>
         </div>
       </motion.div>
 
       {/* Timeline */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card-elevated p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-5">Health Timeline</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-5">{t('rec.healthTimeline')}</h2>
         <div className="hidden md:block">
           <CareJourney steps={timelineSteps} orientation="horizontal" />
         </div>

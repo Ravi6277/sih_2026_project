@@ -1,6 +1,7 @@
 import { motion, type Variants } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Calendar, FileText, Users, Clock, MapPin, Phone, Mail, Shield, Activity, Star } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface GenericPageProps {
   title: string;
@@ -115,12 +116,13 @@ const roleThemes: Record<string, {
 
 export function GenericPage({ title, description, icon, onBack, actions, role = 'doctor' }: GenericPageProps) {
   const theme = roleThemes[role] || roleThemes.doctor;
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-6">
       {onBack && (
         <button onClick={onBack} className="flex items-center gap-2 text-sm text-gray-500 hover:text-sahaay-deep transition-colors">
-          <ArrowLeft size={16} /> Back to Dashboard
+          <ArrowLeft size={16} /> {t('common.back')} {t('dash.overview')}
         </button>
       )}
 

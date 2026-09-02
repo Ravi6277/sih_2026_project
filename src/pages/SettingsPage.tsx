@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Bell, Globe, Eye, Shield, Phone, Palette } from 'lucide-react';
 import { useToast } from '../components/ui/Toast';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState('profile');
+  const { t } = useLanguage();
   const [language, setLanguage] = useState('English');
   const [largeText, setLargeText] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
@@ -30,7 +32,7 @@ export function SettingsPage() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.settings')}</h1>
         <p className="text-sm text-gray-500 mt-1">Manage your account preferences and accessibility settings.</p>
       </motion.div>
 

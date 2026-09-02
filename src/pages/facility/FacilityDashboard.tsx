@@ -4,18 +4,20 @@ import { Users, Clock, ClipboardList, Stethoscope, Activity, Pill, Bed } from 'l
 import { StatCard } from '../../components/ui/StatCard';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { analyticsData, facilityStats } from '../../data/mockData';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface FacilityDashboardProps {
   onNavigate: (route: string) => void;
 }
 
 export function FacilityDashboard(_props: FacilityDashboardProps) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Facility Intelligence</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('fac.intelligence')}</h1>
           <p className="text-gray-600 mt-1">PHC Chandrapur — Operational Overview</p>
         </div>
       </motion.div>

@@ -15,6 +15,10 @@ import { PatientMessages } from './pages/patient/PatientMessages';
 import { PatientNotifications } from './pages/patient/PatientNotifications';
 import { PatientAnalytics } from './pages/patient/PatientAnalytics';
 import { VideoConsultation } from './pages/patient/VideoConsultation';
+import { SymptomChecker } from './pages/patient/SymptomChecker';
+import { MyVitals } from './pages/patient/MyVitals';
+import { LabReportUpload } from './pages/patient/LabReportUpload';
+import { AIAssistant } from './pages/patient/AIAssistant';
 import { DoctorDashboard } from './pages/doctor/DoctorDashboard';
 import { DoctorPatients } from './pages/doctor/DoctorPatients';
 import { DoctorAppointments } from './pages/doctor/DoctorAppointments';
@@ -61,6 +65,10 @@ function AppInner() {
     '/patient/notifications': { title: 'Notifications', subtitle: 'Updates & alerts' },
     '/patient/analytics': { title: 'Analytics', subtitle: 'Healthcare insights' },
     '/patient/consultation': { title: 'Video Consultation', subtitle: 'Teleconsultation' },
+    '/patient/symptom-checker': { title: 'Symptom Checker', subtitle: 'AI-assisted symptom analysis' },
+    '/patient/vitals': { title: 'My Vitals', subtitle: 'Track your health measurements' },
+    '/patient/lab-reports': { title: 'Lab Report Upload', subtitle: 'Upload & manage lab reports' },
+    '/patient/ai-assistant': { title: 'AI Assistant', subtitle: 'Voice & text health guidance' },
     '/doctor/dashboard': { title: 'Overview', subtitle: 'Clinical dashboard' },
     '/doctor/patients': { title: 'My Patients', subtitle: 'Patient management' },
     '/doctor/consultation': { title: 'Consultations', subtitle: 'Video consultations' },
@@ -114,6 +122,42 @@ function AppInner() {
     <ToastProvider>
       <AppShell activeRoute={route} onNavigate={navigate} role="patient" title="Video Consultation" subtitle="Teleconsultation">
         <VideoConsultation />
+      </AppShell>
+    </ToastProvider>
+  );
+
+  // Symptom Checker
+  if (route === '/patient/symptom-checker') return (
+    <ToastProvider>
+      <AppShell activeRoute={route} onNavigate={navigate} role="patient" title="Symptom Checker" subtitle="AI-assisted symptom analysis">
+        <SymptomChecker />
+      </AppShell>
+    </ToastProvider>
+  );
+
+  // My Vitals
+  if (route === '/patient/vitals') return (
+    <ToastProvider>
+      <AppShell activeRoute={route} onNavigate={navigate} role="patient" title="My Vitals" subtitle="Track your health measurements">
+        <MyVitals />
+      </AppShell>
+    </ToastProvider>
+  );
+
+  // Lab Report Upload
+  if (route === '/patient/lab-reports') return (
+    <ToastProvider>
+      <AppShell activeRoute={route} onNavigate={navigate} role="patient" title="Lab Report Upload" subtitle="Upload & manage lab reports">
+        <LabReportUpload />
+      </AppShell>
+    </ToastProvider>
+  );
+
+  // AI Assistant
+  if (route === '/patient/ai-assistant') return (
+    <ToastProvider>
+      <AppShell activeRoute={route} onNavigate={navigate} role="patient" title="AI Assistant" subtitle="Voice & text health guidance">
+        <AIAssistant />
       </AppShell>
     </ToastProvider>
   );

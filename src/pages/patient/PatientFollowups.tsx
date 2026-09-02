@@ -7,9 +7,11 @@ import { ProgressBar } from '../../components/ui/ProgressBar';
 import { Button } from '../../components/ui/Button';
 import { followups } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function PatientFollowups() {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   const tabs = [
@@ -23,7 +25,7 @@ export function PatientFollowups() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Follow-up Care</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.followups')}</h1>
         <p className="text-sm text-gray-500 mt-1">Stay on track with your healthcare follow-ups.</p>
       </motion.div>
 

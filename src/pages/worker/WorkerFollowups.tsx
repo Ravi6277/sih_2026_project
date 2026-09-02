@@ -6,9 +6,11 @@ import { StatusBadge } from '../../components/ui/StatusBadge';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { useToast } from '../../components/ui/Toast';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export function WorkerFollowups() {
   const [filter, setFilter] = useState('all');
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   const filtered = followups.filter(f => filter === 'all' || f.status === filter);
@@ -22,7 +24,7 @@ export function WorkerFollowups() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Follow-ups</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('dash.followups')}</h1>
         <p className="text-sm text-gray-500 mt-1">Track community follow-up appointments.</p>
       </motion.div>
 

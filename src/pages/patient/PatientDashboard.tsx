@@ -1,38 +1,41 @@
 import { motion } from 'framer-motion';
 import {
   Calendar, ClipboardList, Stethoscope, Heart, MapPin, Clock, Video, FileText,
-  Search, Pill, Activity, AlertCircle, ChevronRight, Users
+  Search, Activity, AlertCircle, ChevronRight, Users, Mic, Upload
 } from 'lucide-react';
 import { StatCard } from '../../components/ui/StatCard';
 import { CareJourney } from '../../components/ui/CareJourney';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { facilities } from '../../data/mockData';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface PatientDashboardProps {
   onNavigate: (route: string) => void;
 }
 
 export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
+  const { t } = useLanguage();
+
   const journeySteps = [
-    { label: 'Registration', status: 'completed' as const, date: 'Aug 1' },
-    { label: 'Initial Assessment', status: 'completed' as const, date: 'Aug 5' },
-    { label: 'PHC Consultation', status: 'completed' as const, date: 'Aug 12' },
-    { label: 'Specialist Referral', status: 'current' as const, date: 'Aug 28' },
-    { label: 'Diagnostics', status: 'upcoming' as const },
-    { label: 'Treatment', status: 'upcoming' as const },
-    { label: 'Follow-up', status: 'upcoming' as const },
+    { label: t('dash.registration'), status: 'completed' as const, date: 'Aug 1' },
+    { label: t('dash.initialAssessment'), status: 'completed' as const, date: 'Aug 5' },
+    { label: t('dash.phcConsultation'), status: 'completed' as const, date: 'Aug 12' },
+    { label: t('dash.specialistReferral'), status: 'current' as const, date: 'Aug 28' },
+    { label: t('dash.diagnosticsJourney'), status: 'upcoming' as const },
+    { label: t('dash.treatment'), status: 'upcoming' as const },
+    { label: t('dash.followupJourney'), status: 'upcoming' as const },
   ];
 
   const quickActions = [
-    { icon: Calendar, label: 'Book Appointment', route: '/patient/appointments', color: 'from-blue-500/10 to-blue-400/5', textColor: 'text-blue-600' },
-    { icon: Search, label: 'Find Doctor', route: '/patient/facilities', color: 'from-sahaay-deep/10 to-sahaay-500/5', textColor: 'text-sahaay-deep' },
-    { icon: Video, label: 'Video Consultation', route: '/patient/consultation', color: 'from-purple-500/10 to-purple-400/5', textColor: 'text-purple-600' },
-    { icon: FileText, label: 'Health Records', route: '/patient/records', color: 'from-emerald-500/10 to-emerald-400/5', textColor: 'text-emerald-600' },
-    { icon: ClipboardList, label: 'Track Referral', route: '/patient/referrals', color: 'from-amber-500/10 to-amber-400/5', textColor: 'text-amber-600' },
-    { icon: Activity, label: 'Find Diagnostics', route: '/patient/diagnostics', color: 'from-rose-500/10 to-rose-400/5', textColor: 'text-rose-600' },
-    { icon: Pill, label: 'Medicine Availability', route: '/patient/medicines', color: 'from-teal-500/10 to-teal-400/5', textColor: 'text-teal-600' },
-    { icon: Stethoscope, label: 'Follow-up', route: '/patient/followups', color: 'from-indigo-500/10 to-indigo-400/5', textColor: 'text-indigo-600' },
+    { icon: Stethoscope, label: t('dash.symptomChecker'), route: '/patient/symptom-checker', color: 'from-sahaay-deep/15 to-sahaay-500/8', textColor: 'text-sahaay-deep' },
+    { icon: Mic, label: t('dash.aiAssistant'), route: '/patient/ai-assistant', color: 'from-emerald-500/12 to-emerald-400/5', textColor: 'text-emerald-600' },
+    { icon: Activity, label: t('dash.myVitals'), route: '/patient/vitals', color: 'from-red-500/10 to-red-400/5', textColor: 'text-red-500' },
+    { icon: Upload, label: t('dash.labReports'), route: '/patient/lab-reports', color: 'from-blue-500/10 to-blue-400/5', textColor: 'text-blue-500' },
+    { icon: Calendar, label: t('dash.bookAppointment'), route: '/patient/appointments', color: 'from-violet-500/10 to-violet-400/5', textColor: 'text-violet-600' },
+    { icon: Search, label: t('dash.findDoctor'), route: '/patient/facilities', color: 'from-amber-500/10 to-amber-400/5', textColor: 'text-amber-600' },
+    { icon: Video, label: t('dash.videoConsultation'), route: '/patient/consultation', color: 'from-purple-500/10 to-purple-400/5', textColor: 'text-purple-600' },
+    { icon: FileText, label: t('dash.healthRecords'), route: '/patient/records', color: 'from-teal-500/10 to-teal-400/5', textColor: 'text-teal-600' },
   ];
 
   return (
@@ -45,17 +48,17 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-sahaay-200/30 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Good morning, Rahul 👋</h1>
-          <p className="text-gray-600 mt-1">Here's your healthcare journey at a glance.</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('dash.goodMorning')}, Rahul 👋</h1>
+          <p className="text-gray-600 mt-1">{t('dash.greeting')}</p>
 
           {/* Urgent alert */}
           <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center gap-3">
             <AlertCircle size={18} className="text-amber-500 shrink-0" />
             <p className="text-sm text-amber-700">
-              <span className="font-semibold">Follow-up reminder:</span> Blood pressure review is due in 3 days.
+              <span className="font-semibold">{t('dash.followupReminder')}</span> {t('dash.bpReview')}
             </p>
             <button onClick={() => onNavigate('/patient/followups')} className="ml-auto text-xs font-semibold text-amber-600 hover:underline whitespace-nowrap">
-              View →
+              {t('dash.view')}
             </button>
           </div>
         </div>
@@ -64,31 +67,31 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
       {/* Status cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Next Appointment"
+          title={t('dash.nextAppointment')}
           value="11:30 AM"
           subtitle="Dr. Ananya Sharma · Video"
           icon={<Calendar size={22} />}
           delay={0.05}
         />
         <StatCard
-          title="Referral Status"
-          value="Accepted"
+          title={t('dash.referralStatus')}
+          value={t('dash.accepted')}
           subtitle="District Hospital · Cardiology"
           icon={<ClipboardList size={22} />}
-          trend={{ value: 'On track', positive: true }}
+          trend={{ value: t('dash.onTrack'), positive: true }}
           delay={0.1}
         />
         <StatCard
-          title="Follow-up"
-          value="In 3 days"
-          subtitle="Blood Pressure Review"
+          title={t('dash.followup')}
+          value={t('dash.inDays')}
+          subtitle={t('dash.bpReviewShort')}
           icon={<Stethoscope size={22} />}
           delay={0.15}
         />
         <StatCard
-          title="Health Journey"
+          title={t('dash.healthJourney')}
           value="82%"
-          subtitle="5 of 7 steps completed"
+          subtitle={`5 ${t('dash.stepsCompleted')}`}
           icon={<Heart size={22} />}
           delay={0.2}
         />
@@ -103,11 +106,11 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
       >
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Your Care Journey</h2>
-            <p className="text-sm text-gray-500">Track your healthcare progress from registration to recovery.</p>
+            <h2 className="text-lg font-bold text-gray-900">{t('dash.yourCareJourney')}</h2>
+            <p className="text-sm text-gray-500">{t('dash.careDesc')}</p>
           </div>
           <button onClick={() => onNavigate('/patient/records')} className="text-sm font-semibold text-sahaay-deep hover:underline flex items-center gap-1">
-            View Details <ChevronRight size={14} />
+            {t('dash.viewDetails')} <ChevronRight size={14} />
           </button>
         </div>
 
@@ -134,7 +137,7 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
           transition={{ delay: 0.3 }}
           className="lg:col-span-2 glass-card-elevated p-6"
         >
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">{t('dash.quickActions')}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {quickActions.map((action, i) => {
               const Icon = action.icon;
@@ -161,7 +164,7 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
           transition={{ delay: 0.35 }}
           className="glass-card-elevated p-6"
         >
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Upcoming Appointment</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">{t('dash.upcomingAppointment')}</h2>
           <div className="space-y-3">
             <div className="p-4 rounded-xl bg-sahaay-surface border border-sahaay-deep/6">
               <div className="flex items-center gap-3 mb-3">
@@ -170,17 +173,17 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-gray-900">Dr. Ananya Sharma</p>
-                  <p className="text-xs text-gray-500">General Physician</p>
+                  <p className="text-xs text-gray-500">{t('dash.generalPhysician')}</p>
                 </div>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2 text-gray-600">
                   <Calendar size={14} className="text-sahaay-deep" />
-                  Today, 11:30 AM
+                  {t('dash.today')}, 11:30 AM
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Video size={14} className="text-sahaay-deep" />
-                  Video Consultation
+                  {t('dash.video')}
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <MapPin size={14} className="text-sahaay-deep" />
@@ -192,7 +195,7 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
                 className="sahaay-btn-primary w-full mt-4 py-2.5 text-sm"
               >
                 <Video size={16} className="inline mr-2" />
-                Join Consultation
+                {t('dash.joinConsultation')}
               </button>
             </div>
           </div>
@@ -208,11 +211,11 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
       >
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Recommended Facilities</h2>
-            <p className="text-sm text-gray-500">Based on your healthcare needs and location.</p>
+            <h2 className="text-lg font-bold text-gray-900">{t('dash.recommendedFacilities')}</h2>
+            <p className="text-sm text-gray-500">{t('dash.basedOnNeeds')}</p>
           </div>
           <button onClick={() => onNavigate('/patient/facilities')} className="text-sm font-semibold text-sahaay-deep hover:underline flex items-center gap-1">
-            View All <ChevronRight size={14} />
+            {t('dash.viewAll')} <ChevronRight size={14} />
           </button>
         </div>
 
@@ -233,23 +236,23 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
               <div className="space-y-2 text-xs text-gray-600">
                 <div className="flex items-center gap-1.5">
                   <MapPin size={12} className="text-sahaay-deep" />
-                  {facility.distance} km away
+                  {facility.distance} {t('dash.kmAway')}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Users size={12} className="text-sahaay-deep" />
-                  {facility.doctorsAvailable} doctors available
+                  {facility.doctorsAvailable} {t('dash.doctorsAvailable')}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock size={12} className="text-sahaay-deep" />
-                  ~{facility.waitingTime} min wait
+                  ~{facility.waitingTime} {t('dash.minWait')}
                 </div>
               </div>
               <div className="flex gap-2 mt-4">
                 <button className="flex-1 py-1.5 text-xs font-semibold text-sahaay-deep bg-sahaay-deep/8 rounded-lg hover:bg-sahaay-deep/15 transition-colors">
-                  View
+                  {t('common.view')}
                 </button>
                 <button className="flex-1 py-1.5 text-xs font-semibold text-white bg-sahaay-deep rounded-lg hover:bg-sahaay-700 transition-colors">
-                  Select
+                  {t('dash.select')}
                 </button>
               </div>
             </motion.div>
