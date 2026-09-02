@@ -1,0 +1,148 @@
+import { motion } from 'framer-motion';
+import { Users, Clock, ClipboardList, Stethoscope, Video, FileText, AlertTriangle, ChevronRight, MapPin } from 'lucide-react';
+import { StatCard } from '../../components/ui/StatCard';
+import { StatusBadge } from '../../components/ui/StatusBadge';
+import { Button } from '../../components/ui/Button';
+import { patients } from '../../data/mockData';
+import { useToast } from '../../components/ui/Toast';
+
+interface DoctorDashboardProps {
+  onNavigate: (route: string) => void;
+}
+
+export function DoctorDashboard({ onNavigate }: DoctorDashboardProps) {
+  const { showToast } = useToast();
+
+  const todayQueue = [
+    { patient: patients[0], time: '11:30 AM', reason: 'Hypertension follow-up', mode: 'Video', priority: 'high' },
+    { patient: patients[1], time: '12:00 PM', reason: 'Prenatal checkup', mode: 'In-Person', priority: 'high' },
+    { patient: patients[3], time: '02:30 PM', reason: 'Knee pain consultation', mode: 'Video', priority: 'normal' },
+    { patient: patients[4], time: '03:00 PM', reason: 'Blood work review', mode: 'In-Person', priority: 'normal' },
+    { patient: patients[5], time: '03:30 PM', reason: 'Thyroid monitoring', mode: 'Video', priority: 'low' },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Greeting */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
+        <div className="relative">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Good morning, Dr. Ananya 👋</h1>
+          <p className="text-gray-600 mt-1">Here's your clinical workload for today.</p>
+        </div>
+      </motion.div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard title="Today's Patients" value={12} icon={<Users size={22} />} delay={0.05} />
+        <StatCard title="Pending Consultations" value={4} icon={<Stethoscope size={22} />} delay={0.1} />
+        <StatCard title="Pending Referrals" value={6} icon={<ClipboardList size={22} />} delay={0.15} />
+        <StatCard title="Follow-ups Due" value={8} icon={<Clock size={22} />} delay={0.2} />
+      </div>
+
+      {/* Today's Queue */}
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="glass-card-elevated p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Today's Queue</h2>
+            <p className="text-sm text-gray-500">{todayQueue.length} patients scheduled</p>
+          </div>
+          <Button variant="secondary" size="sm" onClick={() => onNavigate('/doctor/patients')}>View All <ChevronRight size={14} /></Button>
+        </div>
+
+        <div className="space-y-3">
+          {todayQueue.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.05 * i }}
+              className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-white/60 border border-gray-100 hover:shadow-md transition-all"
+            >
+              <div className="flex items-center gap-3 flex-1">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sahaay-deep to-sahaay-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {item.patient.avatar}
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-sm font-bold text-gray-900">{item.patient.name}</p>
+                    <StatusBadge status={item.priority} />
+                    <span className="text-[10px] text-gray-400">{item.patient.age} yrs</span>
+                  </div>
+                  <p className="text-xs text-gray-500">{item.reason}</p>
+                  <p className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5">
+                    <MapPin size={10} />{item.patient.location}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-xs text-gray-500 shrink-0">
+                <span className="flex items-center gap-1"><Clock size={12} className="text-sahaay-deep" />{item.time}</span>
+                <span className="px-2 py-0.5 rounded-md bg-sahaay-deep/6 text-sahaay-deep font-medium">{item.mode}</span>
+              </div>
+
+              <div className="flex gap-2 shrink-0">
+                {item.mode === 'Video' ? (
+                  <Button size="sm" onClick={() => onNavigate('/doctor/consultation')}>
+                    <Video size={14} /> Start
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={() => onNavigate('/doctor/consultation')}>
+                    <Stethoscope size={14} /> Consult
+                  </Button>
+                )}
+                <Button size="sm" variant="secondary" onClick={() => onNavigate('/doctor/patients')}>
+                  <FileText size={14} />
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Bottom row */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Pending referrals */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass-card p-5">
+          <h3 className="text-sm font-bold text-gray-900 mb-3">Pending Referrals</h3>
+          <div className="space-y-2">
+            {[
+              { patient: 'Priya Devi', from: 'RHC Dhekiajuli', reason: 'Diabetes management' },
+              { patient: 'Amit Kumar', from: 'PHC Chandrapur', reason: 'Knee pain evaluation' },
+              { patient: 'Rakesh Singh', from: 'CHC Sonapur', reason: 'Iron deficiency workup' },
+            ].map((r, i) => (
+              <div key={i} className="flex items-center justify-between p-2.5 rounded-lg bg-sahaay-surface text-sm">
+                <div>
+                  <p className="font-semibold text-gray-900">{r.patient}</p>
+                  <p className="text-xs text-gray-500">{r.from} · {r.reason}</p>
+                </div>
+                <Button size="sm" variant="ghost" onClick={() => showToast('Referral reviewed')}>Review</Button>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Follow-up alerts */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="glass-card p-5">
+          <h3 className="text-sm font-bold text-gray-900 mb-3">Follow-up Alerts</h3>
+          <div className="space-y-2">
+            {[
+              { patient: 'Dipak Gogoi', condition: 'Post-surgery recovery', due: 'Sep 10' },
+              { patient: 'Priya Devi', condition: 'HbA1c monitoring', due: 'Aug 28 (Overdue)' },
+              { patient: 'Rakesh Singh', condition: 'Blood test review', due: 'Sep 5' },
+            ].map((f, i) => (
+              <div key={i} className={`flex items-center justify-between p-2.5 rounded-lg text-sm ${f.due.includes('Overdue') ? 'bg-red-50' : 'bg-sahaay-surface'}`}>
+                <div>
+                  <p className="font-semibold text-gray-900">{f.patient}</p>
+                  <p className="text-xs text-gray-500">{f.condition} · Due: {f.due}</p>
+                </div>
+                {f.due.includes('Overdue') && <AlertTriangle size={16} className="text-red-500" />}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+      <div className="h-4 lg:hidden" />
+    </div>
+  );
+}
