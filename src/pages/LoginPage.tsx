@@ -1,155 +1,257 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Heart, Eye, EyeOff, ArrowRight, Shield, Clock, Users } from 'lucide-react';
+import { useId, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Heart, Eye, EyeOff, ArrowRight, Shield, Clock, Users, ChevronRight } from 'lucide-react';
 import { HealthcareCarousel } from '../components/ui/HealthcareCarousel';
 import { LanguageSelector } from '../components/ui/LanguageSelector';
+import { AuroraField } from '../components/fx/AuroraField';
+import { SplitText } from '../components/fx/SplitText';
+import { TiltCard } from '../components/fx/TiltCard';
+import { useTimeGreeting } from '../hooks/useTimeGreeting';
 import { useLanguage } from '../i18n/LanguageContext';
 
 interface LoginPageProps {
   onNavigate: (route: string) => void;
 }
 
+/* Same three destinations and the same icons as before — only the presentation
+   changed. There is no `login.facility` string in any locale, so this stays at
+   three rather than inventing an untranslated fourth. */
+const QUICK_ROLES = [
+  { key: 'login.patient', icon: Users, route: '/patient/dashboard', tint: '#17B366' },
+  { key: 'login.doctor', icon: Shield, route: '/doctor/dashboard', tint: '#0EA5C9' },
+  { key: 'login.worker', icon: Clock, route: '/worker/dashboard', tint: '#F59E0B' },
+];
+
+/** Accepts an email or an Indian mobile number — the field takes either. */
+function looksLikeIdentifier(value: string) {
+  const v = value.trim();
+  return /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v) || /^(\+91[\s-]?)?[6-9]\d{9}$/.test(v.replace(/[\s-]/g, ''));
+}
+
 export function LoginPage({ onNavigate }: LoginPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [touched, setTouched] = useState(false);
   const { t } = useLanguage();
+  const { greeting, Icon: TimeIcon, tint } = useTimeGreeting();
+  const reduce = useReducedMotion();
+
+  // Stable, unique ids so every label is genuinely associated with its input.
+  // The previous markup used bare <label> elements, which look right but do not
+  // move focus on click and are not announced as the field's name.
+  const uid = useId();
+  const emailId = `${uid}-identifier`;
+  const passwordId = `${uid}-password`;
+  const emailErrorId = `${uid}-identifier-error`;
+  const rememberId = `${uid}-remember`;
+
+  /* Advisory only. It fires on a value that cannot possibly be a mobile number
+     or an email, and it never blocks submission — the demo has no backend, and
+     gating the button would break the one path a reviewer actually clicks. */
+  const identifierWarning = touched && email.trim().length > 0 && !looksLikeIdentifier(email);
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left side - Login form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-white relative overflow-hidden">
-        {/* Background decorative images */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sahaay-deep via-sahaay-500 to-sahaay-300" />
-
-        {/* Faded background images */}
-        <div className="absolute top-20 right-10 w-64 h-44 rounded-2xl overflow-hidden opacity-[0.04] rotate-6">
-          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop&auto=format" alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="absolute bottom-20 left-10 w-52 h-36 rounded-2xl overflow-hidden opacity-[0.04] -rotate-3">
-          <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&auto=format" alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="absolute top-1/2 left-1/3 w-40 h-28 rounded-2xl overflow-hidden opacity-[0.03] rotate-12">
-          <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop&auto=format" alt="" className="w-full h-full object-cover" />
-        </div>
+    <div className="flex min-h-screen">
+      {/* ── Form side ──────────────────────────────────────────────────── */}
+      <div className="sahaay-page-bg relative flex flex-1 items-center justify-center overflow-hidden p-6 lg:p-12">
+        {/* The three faded Unsplash photos that used to sit here failed to load
+            whenever the network could not reach images.unsplash.com, leaving
+            blank rectangles. This field is CSS only, so it renders offline. */}
+        <AuroraField intensity={0.7} />
+        <div aria-hidden="true" className="grid-paper pointer-events-none absolute inset-0 opacity-60" />
+        <span aria-hidden="true" className="holo-line absolute inset-x-0 top-0 h-[2px]" />
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-md relative z-10"
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full max-w-md"
         >
-          {/* Logo + Language */}
-          <div className="flex items-center justify-between mb-10">
+          {/* Logo + language */}
+          <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sahaay-deep to-sahaay-600 flex items-center justify-center">
-                <Heart size={20} className="text-white" fill="white" />
-              </div>
-              <span className="text-2xl font-bold text-sahaay-deep">SAHAAY</span>
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sahaay-deep to-sahaay-600">
+                {!reduce && (
+                  <span
+                    aria-hidden="true"
+                    className="animate-halo absolute inset-0 rounded-xl"
+                    style={{ boxShadow: '0 0 0 1px rgba(23,179,102,0.55)' }}
+                  />
+                )}
+                <Heart size={20} className="relative text-white" fill="currentColor" />
+              </span>
+              <span className="font-display text-2xl font-bold tracking-tight text-sahaay-deep">SAHAAY</span>
             </div>
             <LanguageSelector />
           </div>
 
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{t('login.welcome')}</h1>
-          <p className="text-gray-500 mb-8">{t('login.subtitle')}</p>
+          {/* Live greeting — the same clock-driven band used on the dashboards */}
+          <span
+            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em]"
+            style={{ color: tint, background: `${tint}14`, boxShadow: `inset 0 0 0 1px ${tint}33` }}
+          >
+            <TimeIcon size={12} />
+            {greeting}
+          </span>
 
-          {/* Form */}
+          {/* Split by words, never by characters: two of the three locales are
+              Devanagari, where a per-glyph split breaks conjuncts and matras. */}
+          <SplitText
+            as="h1"
+            by="words"
+            immediate
+            text={t('login.welcome')}
+            className="font-display text-[26px] font-bold leading-[1.2] tracking-tight text-ink-900 lg:text-[32px]"
+            stagger={0.06}
+          />
+          <p className="mb-8 mt-2 text-ink-500">{t('login.subtitle')}</p>
+
+          {/* ── Form ─────────────────────────────────────────────────── */}
           <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t('login.email')}</label>
+              <label htmlFor={emailId} className="mb-1.5 block text-sm font-semibold text-ink-700">
+                {t('login.email')}
+              </label>
               <input
+                id={emailId}
                 type="text"
+                inputMode="email"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched(true)}
                 placeholder={t('login.emailPlaceholder')}
+                aria-invalid={identifierWarning || undefined}
+                aria-describedby={identifierWarning ? emailErrorId : undefined}
                 className="sahaay-input"
+                style={identifierWarning ? { borderColor: 'rgba(255,77,109,0.55)' } : undefined}
               />
+              {/* The message sits under the field it belongs to, not in a
+                  summary at the top of the form. */}
+              {identifierWarning && (
+                <motion.p
+                  id={emailErrorId}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-1.5 text-xs font-medium text-vital-pulse-ink"
+                >
+                  That doesn't look like a mobile number or an email address yet.
+                </motion.p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t('login.password')}</label>
+              <label htmlFor={passwordId} className="mb-1.5 block text-sm font-semibold text-ink-700">
+                {t('login.password')}
+              </label>
               <div className="relative">
                 <input
+                  id={passwordId}
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={t('login.passwordPlaceholder')}
-                  className="sahaay-input pr-10"
+                  className="sahaay-input pr-14"
                 />
+                {/* 44×44 target, and it says what it does — the old 18px icon
+                    had neither a label nor a usable tap area. */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-ink-400 transition-colors hover:bg-sahaay-500/10 hover:text-ink-700"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-gray-600">
-                <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-sahaay-deep accent-sahaay-deep" />
+            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+              <label
+                htmlFor={rememberId}
+                className="flex cursor-pointer items-center gap-2 py-2.5 text-ink-600"
+              >
+                <input
+                  id={rememberId}
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-ink-200 accent-sahaay-deep"
+                />
                 {t('login.remember')}
               </label>
-              <button type="button" className="text-sahaay-deep font-semibold hover:underline">{t('login.forgot')}</button>
+              <button
+                type="button"
+                className="rounded-lg px-1 py-2.5 font-semibold text-sahaay-deep hover:underline"
+              >
+                {t('login.forgot')}
+              </button>
             </div>
 
             <button
               onClick={() => onNavigate('/patient/dashboard')}
-              className="sahaay-btn-primary w-full py-3 text-base flex items-center justify-center gap-2"
+              className="sahaay-btn-primary group flex min-h-[48px] w-full items-center justify-center gap-2 text-base"
             >
-              {t('login.submit')} <ArrowRight size={18} />
+              {t('login.submit')}
+              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
             </button>
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium">{t('login.orContinue')}</span>
-            <div className="flex-1 h-px bg-gray-200" />
+          <div className="my-6 flex items-center gap-4">
+            <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-transparent to-sahaay-deep/15" />
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-ink-400">
+              {t('login.orContinue')}
+            </span>
+            <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-l from-transparent to-sahaay-deep/15" />
           </div>
 
-          {/* Quick login buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <button
-              onClick={() => onNavigate('/patient/dashboard')}
-              className="glass-card p-3 text-center hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer"
-            >
-              <div className="w-10 h-10 rounded-xl bg-sahaay-deep/8 mx-auto mb-2 flex items-center justify-center text-sahaay-deep group-hover:bg-sahaay-deep/15 transition-colors overflow-hidden">
-                <Users size={20} />
-              </div>
-              <p className="text-xs font-bold text-gray-800">{t('login.patient')}</p>
-            </button>
-
-            <button
-              onClick={() => onNavigate('/doctor/dashboard')}
-              className="glass-card p-3 text-center hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer"
-            >
-              <div className="w-10 h-10 rounded-xl bg-blue-500/8 mx-auto mb-2 flex items-center justify-center text-blue-600 group-hover:bg-blue-500/15 transition-colors overflow-hidden">
-                <Shield size={20} />
-              </div>
-              <p className="text-xs font-bold text-gray-800">{t('login.doctor')}</p>
-            </button>
-
-            <button
-              onClick={() => onNavigate('/worker/dashboard')}
-              className="glass-card p-3 text-center hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer"
-            >
-              <div className="w-10 h-10 rounded-xl bg-amber-500/8 mx-auto mb-2 flex items-center justify-center text-amber-600 group-hover:bg-amber-500/15 transition-colors overflow-hidden">
-                <Clock size={20} />
-              </div>
-              <p className="text-xs font-bold text-gray-800">{t('login.worker')}</p>
-            </button>
+          {/* Role shortcuts */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {QUICK_ROLES.map((role, i) => {
+              const Icon = role.icon;
+              return (
+                <motion.div
+                  key={role.route}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <TiltCard
+                    as="button"
+                    strength={11}
+                    lift={20}
+                    onClick={() => onNavigate(role.route)}
+                    ariaLabel={`${t('login.orContinue')} ${t(role.key)}`}
+                    className="glass-card group flex min-h-[88px] w-full flex-col items-center justify-center gap-2 p-3 text-center"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                      style={{ color: role.tint, background: `${role.tint}1A`, boxShadow: `inset 0 0 0 1px ${role.tint}2E` }}
+                    >
+                      <Icon size={20} />
+                    </span>
+                    <span className="text-xs font-bold text-ink-800">{t(role.key)}</span>
+                  </TiltCard>
+                </motion.div>
+              );
+            })}
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
-            {t('login.needHelp')} <button className="text-sahaay-deep font-semibold hover:underline">{t('login.contactSupport')}</button>
+          <p className="mt-6 flex flex-wrap items-center justify-center gap-1 text-center text-xs text-ink-400">
+            {t('login.needHelp')}
+            <button className="inline-flex items-center gap-0.5 font-semibold text-sahaay-deep hover:underline">
+              {t('login.contactSupport')}
+              <ChevronRight size={12} />
+            </button>
           </p>
         </motion.div>
       </div>
 
-      {/* Right side - Healthcare Image Carousel */}
-      <div className="hidden lg:block flex-1 relative">
+      {/* ── Carousel side ──────────────────────────────────────────────── */}
+      <div className="relative hidden flex-1 lg:block">
         <HealthcareCarousel variant="login" />
       </div>
     </div>

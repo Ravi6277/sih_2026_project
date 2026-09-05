@@ -2,29 +2,38 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+/* Each slide carries a `wash`: a two-stop brand gradient drawn behind the
+   photo. Remote images are the one part of this app that can fail on a venue's
+   wifi — when they do, the panel now falls back to an on-brand colour field
+   with the caption still legible, instead of a white rectangle. */
 const slides = [
   {
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&h=700&fit=crop&auto=format',
+    wash: 'linear-gradient(150deg, #0E4F3A, #17B366 62%, #0EA5C9)',
     title: 'Connected Care',
     subtitle: 'Every step of your healthcare journey, tracked and coordinated.',
   },
   {
     image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=900&h=700&fit=crop&auto=format',
+    wash: 'linear-gradient(150deg, #0B3F2E, #0EA5C9 58%, #17B366)',
     title: 'Community Health',
     subtitle: 'Bridging rural health centers with specialist care.',
   },
   {
     image: 'https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=900&h=700&fit=crop&auto=format',
+    wash: 'linear-gradient(150deg, #123F63, #7C5CFF 60%, #17B366)',
     title: 'Digital Records',
     subtitle: 'Your health timeline travels with you, everywhere.',
   },
   {
     image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=900&h=700&fit=crop&auto=format',
+    wash: 'linear-gradient(150deg, #0E4F3A, #F59E0B 68%, #17B366)',
     title: 'Smart Facilities',
     subtitle: 'Find the right facility, doctor, and diagnostics near you.',
   },
   {
     image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=900&h=700&fit=crop&auto=format',
+    wash: 'linear-gradient(150deg, #0B3F2E, #17B366 55%, #7C5CFF)',
     title: 'Expert Doctors',
     subtitle: 'Consult with specialists through video and in-person visits.',
   },
@@ -60,11 +69,16 @@ export function HealthcareCarousel({ variant = 'hero' }: HealthcareCarouselProps
             transition={{ duration: 1.2, ease: 'easeOut' }}
             className="absolute inset-0"
           >
+            {/* Brand wash underneath: visible while the photo streams in, and
+                the whole panel if the photo never arrives. */}
+            <div aria-hidden="true" className="absolute inset-0" style={{ background: slide.wash }} />
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover"
+              className="relative h-full w-full object-cover"
               loading="lazy"
+              decoding="async"
+              onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
             />
           </motion.div>
         </AnimatePresence>
@@ -92,16 +106,25 @@ export function HealthcareCarousel({ variant = 'hero' }: HealthcareCarouselProps
             </motion.div>
           </AnimatePresence>
 
-          {/* Dots */}
-          <div className="flex gap-2 mt-6">
-            {slides.map((_, i) => (
+          {/* Dots. The hit area is 44px tall via padding while the visible bar
+              stays 1.5px — icon-sized targets were unusable on touch, and the
+              buttons carried no accessible name at all. */}
+          <div className="mt-4 flex gap-2">
+            {slides.map((s, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${
-                  i === current ? 'w-8 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
-                }`}
-              />
+                aria-label={`Show slide ${i + 1}: ${s.title}`}
+                aria-current={i === current ? 'true' : undefined}
+                className="group flex h-11 items-center py-[21px]"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                    i === current ? 'w-8 bg-white' : 'w-1.5 bg-white/30 group-hover:bg-white/60'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -121,11 +144,14 @@ export function HealthcareCarousel({ variant = 'hero' }: HealthcareCarouselProps
           transition={{ duration: 1.5, ease: 'easeOut' }}
           className="absolute inset-0 rounded-3xl overflow-hidden"
         >
+          <div aria-hidden="true" className="absolute inset-0" style={{ background: slide.wash }} />
           <img
             src={slide.image}
             alt={slide.title}
-            className="w-full h-full object-cover"
+            className="relative h-full w-full object-cover"
             loading="eager"
+            decoding="async"
+            onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
           />
           {/* Soft vignette overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-sahaay-deep/10 via-transparent to-sahaay-950/20" />
@@ -154,17 +180,24 @@ export function HealthcareCarousel({ variant = 'hero' }: HealthcareCarouselProps
       </div>
 
       {/* Progress indicators */}
-      <div className="absolute top-6 right-6 flex flex-col gap-2">
-        {slides.map((_, i) => (
+      <div className="absolute right-4 top-4 flex flex-col">
+        {slides.map((s, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`rounded-full transition-all duration-500 ${
-              i === current
-                ? 'w-2.5 h-2.5 bg-sahaay-deep shadow-[0_0_8px_rgba(31,104,73,0.4)]'
-                : 'w-2 h-2 bg-white/50 hover:bg-white/80'
-            }`}
-          />
+            aria-label={`Show slide ${i + 1}: ${s.title}`}
+            aria-current={i === current ? 'true' : undefined}
+            className="group flex h-11 w-11 items-center justify-center"
+          >
+            <span
+              aria-hidden="true"
+              className={`rounded-full transition-all duration-500 ${
+                i === current
+                  ? 'h-2.5 w-2.5 bg-sahaay-deep shadow-[0_0_8px_rgba(31,104,73,0.4)]'
+                  : 'h-2 w-2 bg-white/60 group-hover:bg-white'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

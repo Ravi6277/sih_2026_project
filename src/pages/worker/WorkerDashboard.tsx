@@ -4,7 +4,7 @@ import { StatCard } from '../../components/ui/StatCard';
 import { Button } from '../../components/ui/Button';
 import { patients } from '../../data/mockData';
 import { useToast } from '../../components/ui/Toast';
-import { useLanguage } from '../../i18n/LanguageContext';
+import { useTimeGreeting } from '../../hooks/useTimeGreeting';
 
 interface WorkerDashboardProps {
   onNavigate: (route: string) => void;
@@ -12,7 +12,9 @@ interface WorkerDashboardProps {
 
 export function WorkerDashboard({ onNavigate }: WorkerDashboardProps) {
   const { showToast } = useToast();
-  const { t } = useLanguage();
+  // The greeting was the only translated string here, and the hook localizes
+  // it itself, so `useLanguage` is no longer needed on this screen.
+  const { greeting, Icon: TimeIcon, tint } = useTimeGreeting();
 
   const quickActions = [
     { icon: UserPlus, label: 'Register Patient', route: '/worker/patients' },
@@ -43,8 +45,20 @@ export function WorkerDashboard({ onNavigate }: WorkerDashboardProps) {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('dash.goodMorning')}, Meena 🌟</h1>
-          <p className="text-gray-600 mt-1">ASHA Worker · PHC Chandrapur · Chandrapur Village</p>
+          {/* Live greeting: sunrise → sun → sunset → moon as the day turns.
+              Field workers start before dawn and finish after dark, so a fixed
+              "Good morning" was wrong for most of their shift. */}
+          <h1 className="flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-2xl font-bold text-ink-900 lg:text-3xl">
+            <span
+              aria-hidden="true"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+              style={{ color: tint, background: `${tint}1A`, boxShadow: `inset 0 0 0 1px ${tint}33` }}
+            >
+              <TimeIcon size={19} />
+            </span>
+            <span>{greeting}, Meena</span>
+          </h1>
+          <p className="mt-1.5 text-ink-500">ASHA Worker · PHC Chandrapur · Chandrapur Village</p>
         </div>
       </motion.div>
 

@@ -8,6 +8,7 @@ import { CareJourney } from '../../components/ui/CareJourney';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { facilities } from '../../data/mockData';
+import { useTimeGreeting } from '../../hooks/useTimeGreeting';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 interface PatientDashboardProps {
@@ -16,6 +17,7 @@ interface PatientDashboardProps {
 
 export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
   const { t } = useLanguage();
+  const { greeting, Icon: TimeIcon, tint } = useTimeGreeting();
 
   const journeySteps = [
     { label: t('dash.registration'), status: 'completed' as const, date: 'Aug 1' },
@@ -48,8 +50,21 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-sahaay-200/30 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('dash.goodMorning')}, Rahul 👋</h1>
-          <p className="text-gray-600 mt-1">{t('dash.greeting')}</p>
+          {/* The greeting tracks the real clock, and the glyph moves with it:
+              sunrise → sun → sunset → moon. A lucide icon rather than the 👋
+              emoji, which renders differently on every platform and is read out
+              literally by screen readers. */}
+          <h1 className="flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-2xl font-bold text-ink-900 lg:text-3xl">
+            <span
+              aria-hidden="true"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+              style={{ color: tint, background: `${tint}1A`, boxShadow: `inset 0 0 0 1px ${tint}33` }}
+            >
+              <TimeIcon size={19} />
+            </span>
+            <span>{greeting}, Rahul</span>
+          </h1>
+          <p className="mt-1.5 text-ink-500">{t('dash.greeting')}</p>
 
           {/* Urgent alert */}
           <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center gap-3">

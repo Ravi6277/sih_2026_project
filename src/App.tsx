@@ -35,6 +35,7 @@ import { FacilityDashboard } from './pages/facility/FacilityDashboard';
 import { SettingsPage } from './pages/SettingsPage';
 import { GenericPage } from './pages/GenericPage';
 import { Scene as KageScene } from './pages/KageScene';
+import { PageTransition } from './components/fx/PageTransition';
 import { LanguageProvider } from './i18n/LanguageContext';
 
 function AppInner() {
@@ -91,6 +92,10 @@ function AppInner() {
     '/facility/messages': { title: 'Messages', subtitle: 'Communication' },
     '/settings': { title: 'Settings', subtitle: 'Account preferences' },
   };
+
+  /* Route resolution is unchanged — it is wrapped in a function only so the
+     single return below can hand the result to PageTransition. */
+  const resolve = (): ReactNode => {
 
   // Public routes
   if (route === '/') return (
@@ -287,6 +292,10 @@ function AppInner() {
       <LandingPage onNavigate={navigate} />
     </ToastProvider>
   );
+
+  };
+
+  return <PageTransition routeKey={route}>{resolve()}</PageTransition>;
 }
 
 function App() {

@@ -4,6 +4,7 @@ import { Users, Clock, ClipboardList, Stethoscope, Activity, Pill, Bed } from 'l
 import { StatCard } from '../../components/ui/StatCard';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { analyticsData, facilityStats } from '../../data/mockData';
+import { useTimeGreeting } from '../../hooks/useTimeGreeting';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 interface FacilityDashboardProps {
@@ -12,13 +13,23 @@ interface FacilityDashboardProps {
 
 export function FacilityDashboard(_props: FacilityDashboardProps) {
   const { t } = useLanguage();
+  const { greeting, Icon: TimeIcon, tint } = useTimeGreeting();
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden glass-card-elevated p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-100/40 to-transparent rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="relative">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{t('fac.intelligence')}</h1>
-          <p className="text-gray-600 mt-1">PHC Chandrapur — Operational Overview</p>
+          {/* This screen is a console, not a personal dashboard, so the live
+              greeting sits above the title as a chip rather than replacing it. */}
+          <span
+            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em]"
+            style={{ color: tint, background: `${tint}14`, boxShadow: `inset 0 0 0 1px ${tint}33` }}
+          >
+            <TimeIcon size={12} />
+            {greeting}
+          </span>
+          <h1 className="font-display text-2xl font-bold text-ink-900 lg:text-3xl">{t('fac.intelligence')}</h1>
+          <p className="mt-1.5 text-ink-500">PHC Chandrapur — Operational Overview</p>
         </div>
       </motion.div>
 

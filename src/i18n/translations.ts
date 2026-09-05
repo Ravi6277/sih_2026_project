@@ -100,6 +100,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'dash.myVitals': 'My Vitals',
     'dash.labReports': 'Lab Reports',
 
+    // Sidebar group headers
+    'nav.group.assess': 'Assess',
+    'nav.group.carePlan': 'Care plan',
+    'nav.group.locate': 'Find care',
+    'nav.group.records': 'Records',
+    'nav.group.account': 'Account',
+    'nav.group.clinical': 'Clinical',
+    'nav.group.coordination': 'Coordination',
+    'nav.group.field': 'Field work',
+    'nav.group.operations': 'Operations',
+
     // Common
     'common.search': 'Search...',
     'common.filter': 'Filter',
@@ -293,6 +304,9 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Patient Dashboard
     'dash.goodMorning': 'Good morning',
+    'dash.goodAfternoon': 'Good afternoon',
+    'dash.goodEvening': 'Good evening',
+    'dash.goodNight': 'Good night',
     'dash.greeting': "Here's your healthcare journey at a glance.",
     'dash.followupReminder': 'Follow-up reminder:',
     'dash.bpReview': 'Blood pressure review is due in 3 days.',
@@ -433,6 +447,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'dash.aiAssistant': 'AI सहायक',
     'dash.myVitals': 'मेरे वाइटल्स',
     'dash.labReports': 'लैब रिपोर्ट',
+
+    // Sidebar group headers
+    'nav.group.assess': 'आकलन',
+    'nav.group.carePlan': 'देखभाल योजना',
+    'nav.group.locate': 'सेवा खोजें',
+    'nav.group.records': 'रिकॉर्ड',
+    'nav.group.account': 'खाता',
+    'nav.group.clinical': 'नैदानिक',
+    'nav.group.coordination': 'समन्वय',
+    'nav.group.field': 'क्षेत्र कार्य',
+    'nav.group.operations': 'संचालन',
 
     // Common
     'common.search': 'खोजें...',
@@ -627,6 +652,9 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Patient Dashboard
     'dash.goodMorning': 'शुभ प्रभात',
+    'dash.goodAfternoon': 'शुभ दोपहर',
+    'dash.goodEvening': 'शुभ संध्या',
+    'dash.goodNight': 'शुभ रात्रि',
     'dash.greeting': 'आपकी स्वास्थ्य यात्रा की एक झलक।',
     'dash.followupReminder': 'फॉलो-अप अनुस्मारक:',
     'dash.bpReview': 'रक्तचाप समीक्षा 3 दिनों में देय है।',
@@ -767,6 +795,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'dash.aiAssistant': 'AI सहाय्यक',
     'dash.myVitals': 'माझे वाइटल्स',
     'dash.labReports': 'लॅब अहवाल',
+
+    // Sidebar group headers
+    'nav.group.assess': 'मूल्यांकन',
+    'nav.group.carePlan': 'काळजी योजना',
+    'nav.group.locate': 'सेवा शोधा',
+    'nav.group.records': 'नोंदी',
+    'nav.group.account': 'खाते',
+    'nav.group.clinical': 'वैद्यकीय',
+    'nav.group.coordination': 'समन्वय',
+    'nav.group.field': 'क्षेत्र कार्य',
+    'nav.group.operations': 'कार्यचालन',
 
     // Common
     'common.search': 'शोधा...',
@@ -960,7 +999,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'lab.uploadFirst': 'सुरू करण्यासाठी तुमचा पहिला लॅब अहवाल अपलोड करा',
 
     // Patient Dashboard
-    'dash.goodMorning': 'सप्रभात',
+    'dash.goodMorning': 'सुप्रभात',
+    'dash.goodAfternoon': 'शुभ दुपार',
+    'dash.goodEvening': 'शुभ संध्याकाळ',
+    'dash.goodNight': 'शुभ रात्री',
     'dash.greeting': 'तुमच्या आरोग्य प्रवासाची एक झलक.',
     'dash.followupReminder': 'फॉलो-अप स्मरण:',
     'dash.bpReview': 'रक्तदाब समीक्षा 3 दिवसांमध्ये देय आहे.',
